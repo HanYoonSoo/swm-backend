@@ -29,6 +29,7 @@ public class CustomStudyRepositoryImpl implements CustomStudyRepository {
     public List<Study> findPagedStudyListByCondition(int pageSize, FindStudyCondition condition) {
         return jpaQueryFactory.selectFrom(study)
                 .where(
+                        studyTitleContains(condition.getTitle()),
                         studyCategoryEq(condition.getCategory()),
                         studyStatusEq(condition.getStatus()),
                         recruitmentPositionTitleExists(condition.getRecruitmentPositionTitleList()),
@@ -37,6 +38,10 @@ public class CustomStudyRepositoryImpl implements CustomStudyRepository {
                 .orderBy(createOrderSpecifier(condition.getSortCriteria()))
                 .limit(pageSize)
                 .fetch();
+    }
+
+    private BooleanBuilder studyTitleContains(String title) {
+        return this.nullSafeBuilder(() -> study.title.contains(title));
     }
 
     private BooleanBuilder studyCategoryEq(StudyCategory category) {

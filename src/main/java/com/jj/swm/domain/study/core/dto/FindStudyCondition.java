@@ -13,6 +13,8 @@ import java.util.List;
 @Setter
 public class FindStudyCondition {
 
+    private String title;
+
     private StudyCategory category;
 
     private StudyStatus status;
