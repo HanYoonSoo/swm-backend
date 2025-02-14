@@ -1,8 +1,8 @@
 package com.jj.swm.domain.study.core.controller;
 
-import com.jj.swm.domain.study.core.dto.FindStudyCondition;
-import com.jj.swm.domain.study.core.dto.response.FindStudyDetailsResponse;
-import com.jj.swm.domain.study.core.dto.response.FindStudyResponse;
+import com.jj.swm.domain.study.core.dto.GetStudyCondition;
+import com.jj.swm.domain.study.core.dto.response.GetStudyDetailsResponse;
+import com.jj.swm.domain.study.core.dto.response.GetStudyResponse;
 import com.jj.swm.domain.study.core.service.StudyQueryService;
 import com.jj.swm.global.common.dto.ApiResponse;
 import com.jj.swm.global.common.dto.PageResponse;
@@ -20,8 +20,8 @@ public class StudyQueryController {
     private final StudyQueryService studyQueryService;
 
     @GetMapping("/v1/study")
-    public ApiResponse<PageResponse<FindStudyResponse>> studyList(Principal principal, FindStudyCondition condition) {
-        PageResponse<FindStudyResponse> pageResponse = studyQueryService.findStudyList(
+    public ApiResponse<PageResponse<GetStudyResponse>> studyList(Principal principal, GetStudyCondition condition) {
+        PageResponse<GetStudyResponse> pageResponse = studyQueryService.findStudyList(
                 principal != null ? UUID.fromString(principal.getName()) : null, condition
         );
 
@@ -29,10 +29,10 @@ public class StudyQueryController {
     }
 
     @GetMapping("/v1/study/{studyId}")
-    public ApiResponse<FindStudyDetailsResponse> studyDetails(
+    public ApiResponse<GetStudyDetailsResponse> studyDetails(
             Principal principal, @PathVariable("studyId") Long studyId
     ) {
-        FindStudyDetailsResponse response = studyQueryService.findStudy(
+        GetStudyDetailsResponse response = studyQueryService.findStudy(
                 principal != null ? UUID.fromString(principal.getName()) : null, studyId
         );
 
@@ -40,10 +40,10 @@ public class StudyQueryController {
     }
 
     @GetMapping("/v1/study/user/liked-studies")
-    public ApiResponse<PageResponse<FindStudyResponse>> userLikedStudyList(
+    public ApiResponse<PageResponse<GetStudyResponse>> userLikedStudyList(
             Principal principal, @RequestParam(value = "pageNo") int pageNo
     ) {
-        PageResponse<FindStudyResponse> pageResponse = studyQueryService.findUserLikedStudyList(
+        PageResponse<GetStudyResponse> pageResponse = studyQueryService.findUserLikedStudyList(
                 UUID.fromString(principal.getName()), pageNo
         );
 
@@ -51,10 +51,10 @@ public class StudyQueryController {
     }
 
     @GetMapping("/v1/study/user/bookmarked-studies")
-    public ApiResponse<PageResponse<FindStudyResponse>> userBookmarkedStudyList(
+    public ApiResponse<PageResponse<GetStudyResponse>> userBookmarkedStudyList(
             Principal principal, @RequestParam(value = "pageNo") int pageNo
     ) {
-        PageResponse<FindStudyResponse> pageResponse = studyQueryService.findUserBookmarkedStudyList(
+        PageResponse<GetStudyResponse> pageResponse = studyQueryService.findUserBookmarkedStudyList(
                 UUID.fromString(principal.getName()), pageNo
         );
 

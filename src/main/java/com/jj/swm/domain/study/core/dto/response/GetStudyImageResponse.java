@@ -6,14 +6,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class FindStudyImageResponse {
+public class GetStudyImageResponse {
 
     private Long imageId;
 
     private String imageUrl;
 
-    public static FindStudyImageResponse from(StudyImage image) {
-        return FindStudyImageResponse.builder()
+    public static GetStudyImageResponse from(StudyImage image) {
+        return GetStudyImageResponse.builder()
                 .imageId(image.getId())
                 .imageUrl(image.getImageUrl())
                 .build();

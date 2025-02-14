@@ -1,8 +1,8 @@
 package com.jj.swm.domain.study.comment.service;
 
 import com.jj.swm.domain.study.comment.dto.ReplyCountInfo;
-import com.jj.swm.domain.study.comment.dto.response.FindCommentResponse;
-import com.jj.swm.domain.study.comment.dto.response.FindParentCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.GetCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.GetParentCommentResponse;
 import com.jj.swm.domain.study.comment.entity.StudyComment;
 import com.jj.swm.domain.study.comment.repository.CommentRepository;
 import com.jj.swm.global.common.dto.PageResponse;
@@ -26,7 +26,7 @@ public class CommentQueryService {
     private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<FindParentCommentResponse> findCommentList(Long studyId, int pageNo) {
+    public PageResponse<GetParentCommentResponse> findCommentList(Long studyId, int pageNo) {
         Pageable pageable = PageRequest.of(
                 pageNo,
                 PageSize.StudyComment,
@@ -37,7 +37,7 @@ public class CommentQueryService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<FindCommentResponse> findReplyList(Long parentId, Long lastReplyId) {
+    public PageResponse<GetCommentResponse> findReplyList(Long parentId, Long lastReplyId) {
         List<StudyComment> replyList = commentRepository.findPagedReplyListByParentIdWithUser(
                 PageSize.StudyReply + 1,
                 parentId,
@@ -52,14 +52,14 @@ public class CommentQueryService {
 
         List<StudyComment> pagedReplyList = hasNext ? replyList.subList(0, PageSize.StudyReply) : replyList;
 
-        List<FindCommentResponse> responseList = pagedReplyList.stream()
-                .map(FindCommentResponse::from)
+        List<GetCommentResponse> responseList = pagedReplyList.stream()
+                .map(GetCommentResponse::from)
                 .toList();
 
         return PageResponse.of(responseList, hasNext);
     }
 
-    public PageResponse<FindParentCommentResponse> loadPageParentAndReplyCountResponse(Long studyId, Pageable pageable) {
+    public PageResponse<GetParentCommentResponse> loadPageParentAndReplyCountResponse(Long studyId, Pageable pageable) {
         Page<StudyComment> pagedComment = commentRepository.findPagedParentByStudyIdWithUser(studyId, pageable);
 
         List<Long> parentIdList = pagedComment.get()
@@ -72,7 +72,7 @@ public class CommentQueryService {
 
         return PageResponse.of(
                 pagedComment,
-                (comment) -> FindParentCommentResponse.of(comment, replyCountByParentId.getOrDefault(comment.getId(), 0))
+                (comment) -> GetParentCommentResponse.of(comment, replyCountByParentId.getOrDefault(comment.getId(), 0))
         );
     }
 }

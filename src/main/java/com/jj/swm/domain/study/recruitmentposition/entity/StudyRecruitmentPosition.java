@@ -1,8 +1,8 @@
 package com.jj.swm.domain.study.recruitmentposition.entity;
 
 import com.jj.swm.domain.study.core.entity.Study;
-import com.jj.swm.domain.study.recruitmentposition.dto.request.AddRecruitmentPositionRequest;
-import com.jj.swm.domain.study.recruitmentposition.dto.request.ModifyRecruitmentPositionRequest;
+import com.jj.swm.domain.study.recruitmentposition.dto.request.CreateRecruitmentPositionRequest;
+import com.jj.swm.domain.study.recruitmentposition.dto.request.UpdateRecruitmentPositionRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;
@@ -44,7 +44,7 @@ public class StudyRecruitmentPosition {
     @JoinColumn(name = "study_id", nullable = false)
     private Study study;
 
-    public static StudyRecruitmentPosition of(Study study, AddRecruitmentPositionRequest request) {
+    public static StudyRecruitmentPosition of(Study study, CreateRecruitmentPositionRequest request) {
         return StudyRecruitmentPosition.builder()
                 .title(request.getTitle())
                 .headcount(request.getHeadcount())
@@ -53,7 +53,7 @@ public class StudyRecruitmentPosition {
                 .build();
     }
 
-    public void modify(ModifyRecruitmentPositionRequest request) {
+    public void modify(UpdateRecruitmentPositionRequest request) {
         this.title = request.getTitle();
         this.headcount = request.getHeadcount();
         this.acceptedCount = request.getAcceptedCount();

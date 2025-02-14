@@ -1,9 +1,9 @@
 package com.jj.swm.domain.study.core.dto.response;
 
-import com.jj.swm.domain.study.comment.dto.response.FindParentCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.GetParentCommentResponse;
 import com.jj.swm.domain.study.core.entity.StudyCategory;
 import com.jj.swm.domain.study.core.entity.StudyStatus;
-import com.jj.swm.domain.study.recruitmentposition.dto.response.FindRecruitmentPositionResponse;
+import com.jj.swm.domain.study.recruitmentposition.dto.response.GetRecruitmentPositionResponse;
 import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.global.common.dto.PageResponse;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class FindStudyDetailsResponse {
+public class GetStudyDetailsResponse {
 
     private Long studyId;
 
@@ -44,22 +44,22 @@ public class FindStudyDetailsResponse {
 
     private Long studyBookmarkId;
 
-    private List<FindStudyTagResponse> findTagResponseList;
+    private List<GetStudyTagResponse> getTagResponseList;
 
-    private List<FindStudyImageResponse> findImageResponseList;
+    private List<GetStudyImageResponse> getImageResponseList;
 
-    private List<FindRecruitmentPositionResponse> findRecruitmentPositionResponseList;
+    private List<GetRecruitmentPositionResponse> getRecruitmentPositionResponseList;
 
-    private PageResponse<FindParentCommentResponse> pageCommentResponse;
+    private PageResponse<GetParentCommentResponse> pageCommentResponse;
 
-    public static FindStudyDetailsResponse of(
+    public static GetStudyDetailsResponse of(
             Study study,
             boolean likeStatus,
             Long studyBookmarkId,
-            List<FindStudyImageResponse> findImageResponseList,
-            PageResponse<FindParentCommentResponse> pageCommentResponse
+            List<GetStudyImageResponse> getImageResponseList,
+            PageResponse<GetParentCommentResponse> pageCommentResponse
     ) {
-        return FindStudyDetailsResponse.builder()
+        return GetStudyDetailsResponse.builder()
                 .studyId(study.getId())
                 .title(study.getTitle())
                 .content(study.getContent())
@@ -74,12 +74,12 @@ public class FindStudyDetailsResponse {
                 .likeStatus(likeStatus)
                 .openChatUrl(study.getOpenChatUrl())
                 .studyBookmarkId(studyBookmarkId)
-                .findTagResponseList(study.getStudyTagList().stream()
-                        .map(FindStudyTagResponse::from)
+                .getTagResponseList(study.getStudyTagList().stream()
+                        .map(GetStudyTagResponse::from)
                         .toList())
-                .findImageResponseList(findImageResponseList)
-                .findRecruitmentPositionResponseList(study.getStudyRecruitmentPositionList().stream()
-                        .map(FindRecruitmentPositionResponse::from)
+                .getImageResponseList(getImageResponseList)
+                .getRecruitmentPositionResponseList(study.getStudyRecruitmentPositionList().stream()
+                        .map(GetRecruitmentPositionResponse::from)
                         .toList()
                 )
                 .pageCommentResponse(pageCommentResponse)

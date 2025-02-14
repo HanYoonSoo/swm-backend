@@ -3,9 +3,9 @@ package com.jj.swm.domain.study.recruitmentposition.service;
 import com.jj.swm.domain.study.constants.StudyElementLimit;
 import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.domain.study.core.repository.StudyRepository;
-import com.jj.swm.domain.study.recruitmentposition.dto.request.AddRecruitmentPositionRequest;
-import com.jj.swm.domain.study.recruitmentposition.dto.request.ModifyRecruitmentPositionRequest;
-import com.jj.swm.domain.study.recruitmentposition.dto.response.AddRecruitmentPositionResponse;
+import com.jj.swm.domain.study.recruitmentposition.dto.request.CreateRecruitmentPositionRequest;
+import com.jj.swm.domain.study.recruitmentposition.dto.request.UpdateRecruitmentPositionRequest;
+import com.jj.swm.domain.study.recruitmentposition.dto.response.CreateRecruitmentPositionResponse;
 import com.jj.swm.domain.study.recruitmentposition.entity.StudyRecruitmentPosition;
 import com.jj.swm.domain.study.recruitmentposition.repository.RecruitmentPositionRepository;
 import com.jj.swm.global.common.enums.ErrorCode;
@@ -24,10 +24,10 @@ public class RecruitmentPositionCommandService {
     private final RecruitmentPositionRepository recruitmentPositionRepository;
 
     @Transactional
-    public AddRecruitmentPositionResponse addRecruitmentPosition(
+    public CreateRecruitmentPositionResponse addRecruitmentPosition(
             UUID userId,
             Long studyId,
-            AddRecruitmentPositionRequest request
+            CreateRecruitmentPositionRequest request
     ) {
         verifyRecruitmentPositionSizeLimit(studyId);
 
@@ -37,7 +37,7 @@ public class RecruitmentPositionCommandService {
         StudyRecruitmentPosition recruitmentPosition = StudyRecruitmentPosition.of(study, request);
         recruitmentPositionRepository.save(recruitmentPosition);
 
-        return AddRecruitmentPositionResponse.from(recruitmentPosition);
+        return CreateRecruitmentPositionResponse.from(recruitmentPosition);
     }
 
     private void verifyRecruitmentPositionSizeLimit(Long studyId) {
@@ -51,7 +51,7 @@ public class RecruitmentPositionCommandService {
     public void modifyRecruitmentPosition(
             UUID userId,
             Long recruitmentPositionId,
-            ModifyRecruitmentPositionRequest request
+            UpdateRecruitmentPositionRequest request
     ) {
         StudyRecruitmentPosition recruitmentPosition =
                 recruitmentPositionRepository.findByIdAndStudyUserId(recruitmentPositionId, userId)
@@ -62,7 +62,7 @@ public class RecruitmentPositionCommandService {
         recruitmentPosition.modify(request);
     }
 
-    private void validateAcceptedCount(ModifyRecruitmentPositionRequest request) {
+    private void validateAcceptedCount(UpdateRecruitmentPositionRequest request) {
         if (request.getHeadcount() < request.getAcceptedCount()) {
             throw new GlobalException(ErrorCode.NOT_VALID, "The number of accepted exceeds the recruitment limit.");
         }

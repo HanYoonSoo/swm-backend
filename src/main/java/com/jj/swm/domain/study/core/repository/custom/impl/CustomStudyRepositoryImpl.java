@@ -1,6 +1,6 @@
 package com.jj.swm.domain.study.core.repository.custom.impl;
 
-import com.jj.swm.domain.study.core.dto.FindStudyCondition;
+import com.jj.swm.domain.study.core.dto.GetStudyCondition;
 import com.jj.swm.domain.study.core.dto.SortCriteria;
 import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.domain.study.core.entity.StudyCategory;
@@ -26,7 +26,7 @@ public class CustomStudyRepositoryImpl implements CustomStudyRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Study> findPagedStudyListByCondition(int pageSize, FindStudyCondition condition) {
+    public List<Study> findPagedStudyListByCondition(int pageSize, GetStudyCondition condition) {
         return jpaQueryFactory.selectFrom(study)
                 .where(
                         studyTitleContains(condition.getTitle()),
@@ -78,7 +78,7 @@ public class CustomStudyRepositoryImpl implements CustomStudyRepository {
         };
     }
 
-    private BooleanBuilder createSortPredicate(FindStudyCondition condition) {
+    private BooleanBuilder createSortPredicate(GetStudyCondition condition) {
         Integer lastSortValue = condition.getLastSortValue();
         SortCriteria sortCriteria = condition.getSortCriteria();
         Long lastStudyId = condition.getLastStudyId();

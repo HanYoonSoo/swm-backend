@@ -6,12 +6,12 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AddStudyBookmarkResponse {
+public class CreateStudyBookmarkResponse {
 
     private Long bookmarkId;
 
-    public static AddStudyBookmarkResponse from(StudyBookmark studyBookmark) {
-        return AddStudyBookmarkResponse.builder()
+    public static CreateStudyBookmarkResponse from(StudyBookmark studyBookmark) {
+        return CreateStudyBookmarkResponse.builder()
                 .bookmarkId(studyBookmark.getId())
                 .build();
     }

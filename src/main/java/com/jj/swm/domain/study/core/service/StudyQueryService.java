@@ -1,12 +1,12 @@
 package com.jj.swm.domain.study.core.service;
 
-import com.jj.swm.domain.study.comment.dto.response.FindParentCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.GetParentCommentResponse;
 import com.jj.swm.domain.study.comment.service.CommentQueryService;
-import com.jj.swm.domain.study.core.dto.FindStudyCondition;
+import com.jj.swm.domain.study.core.dto.GetStudyCondition;
 import com.jj.swm.domain.study.core.dto.StudyBookmarkInfo;
-import com.jj.swm.domain.study.core.dto.response.FindStudyDetailsResponse;
-import com.jj.swm.domain.study.core.dto.response.FindStudyImageResponse;
-import com.jj.swm.domain.study.core.dto.response.FindStudyResponse;
+import com.jj.swm.domain.study.core.dto.response.GetStudyDetailsResponse;
+import com.jj.swm.domain.study.core.dto.response.GetStudyImageResponse;
+import com.jj.swm.domain.study.core.dto.response.GetStudyResponse;
 import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.domain.study.core.entity.StudyBookmark;
 import com.jj.swm.domain.study.core.entity.StudyImage;
@@ -40,7 +40,7 @@ public class StudyQueryService {
     private final StudyBookmarkRepository studyBookmarkRepository;
 
     @Transactional(readOnly = true)
-    public PageResponse<FindStudyResponse> findStudyList(UUID userId, FindStudyCondition condition) {
+    public PageResponse<GetStudyResponse> findStudyList(UUID userId, GetStudyCondition condition) {
         List<Study> studyList = studyRepository.findPagedStudyListByCondition(PageSize.Study + 1, condition);
 
         if (studyList.isEmpty()) {
@@ -53,7 +53,7 @@ public class StudyQueryService {
 
         Map<Long, Long> bookmarkIdByStudyId = loadBookmarkInfoMapIfLogin(userId, pagedStudyList);
 
-        List<FindStudyResponse> responseList = loadFindStudyResponse(pagedStudyList, bookmarkIdByStudyId);
+        List<GetStudyResponse> responseList = loadGetStudyResponse(pagedStudyList, bookmarkIdByStudyId);
 
         return PageResponse.of(responseList, hasNext);
     }
@@ -66,18 +66,18 @@ public class StudyQueryService {
         return loadBookmarkInfoMap(userId, studyList);
     }
 
-    private List<FindStudyResponse> loadFindStudyResponse(
+    private List<GetStudyResponse> loadGetStudyResponse(
             List<Study> pagedStudyList, Map<Long, Long> bookmarkIdByStudyId
     ) {
         return pagedStudyList.stream()
-                .map(study -> FindStudyResponse.of(
+                .map(study -> GetStudyResponse.of(
                         study, bookmarkIdByStudyId.getOrDefault(study.getId(), null)
                 ))
                 .toList();
     }
 
     @Transactional
-    public FindStudyDetailsResponse findStudy(UUID userId, Long studyId) {
+    public GetStudyDetailsResponse findStudy(UUID userId, Long studyId) {
         Study study = studyRepository.findByIdWithUserUsingPessimisticLock(studyId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND, "study not found"));
 
@@ -87,8 +87,8 @@ public class StudyQueryService {
 
         List<StudyImage> imageList = studyImageRepository.findAllByStudyId(studyId);
 
-        List<FindStudyImageResponse> findImageResponseList = imageList.stream()
-                .map(FindStudyImageResponse::from)
+        List<GetStudyImageResponse> getImageResponseList = imageList.stream()
+                .map(GetStudyImageResponse::from)
                 .toList();
 
         Pageable pageable = PageRequest.of(
@@ -96,14 +96,14 @@ public class StudyQueryService {
                 PageSize.StudyComment,
                 Sort.by("id").descending()
         );
-        PageResponse<FindParentCommentResponse> pageCommentResponse =
+        PageResponse<GetParentCommentResponse> pageCommentResponse =
                 commentQueryService.loadPageParentAndReplyCountResponse(studyId, pageable);
 
-        return FindStudyDetailsResponse.of(
+        return GetStudyDetailsResponse.of(
                 study,
                 likeStatusAndBookmarkId.likeStatus(),
                 likeStatusAndBookmarkId.bookmarkId(),
-                findImageResponseList,
+                getImageResponseList,
                 pageCommentResponse
         );
     }
@@ -121,7 +121,7 @@ public class StudyQueryService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<FindStudyResponse> findUserLikedStudyList(UUID userId, int pageNo) {
+    public PageResponse<GetStudyResponse> findUserLikedStudyList(UUID userId, int pageNo) {
         Pageable pageable = PageRequest.of(
                 pageNo,
                 PageSize.Study,
@@ -134,12 +134,12 @@ public class StudyQueryService {
 
         return PageResponse.of(
                 pagedStudy,
-                (study) -> FindStudyResponse.of(study, bookmarkIdByStudyId.getOrDefault(study.getId(), null))
+                (study) -> GetStudyResponse.of(study, bookmarkIdByStudyId.getOrDefault(study.getId(), null))
         );
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<FindStudyResponse> findUserBookmarkedStudyList(UUID userId, int pageNo) {
+    public PageResponse<GetStudyResponse> findUserBookmarkedStudyList(UUID userId, int pageNo) {
         Pageable pageable = PageRequest.of(
                 pageNo,
                 PageSize.Study,
@@ -150,7 +150,7 @@ public class StudyQueryService {
                 userId, pageable
         );
 
-        return PageResponse.of(pagedStudyBookmark, FindStudyResponse::of);
+        return PageResponse.of(pagedStudyBookmark, GetStudyResponse::of);
     }
 
     private Map<Long, Long> loadBookmarkInfoMap(UUID userId, Collection<Study> pagedStudy) {
