@@ -1,7 +1,7 @@
 package com.jj.swm.domain.study.core.dto.request;
 
 import com.jj.swm.domain.study.constants.StudyElementLimit;
-import com.jj.swm.domain.study.recruitmentposition.dto.request.AddRecruitmentPositionRequest;
+import com.jj.swm.domain.study.recruitmentposition.dto.request.CreateRecruitmentPositionRequest;
 import com.jj.swm.domain.study.core.entity.StudyCategory;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AddStudyRequest {
+public class CreateStudyRequest {
 
     @NotBlank
     private String title;
@@ -39,5 +39,5 @@ public class AddStudyRequest {
     @Valid
     @NotEmpty
     @Size(max = StudyElementLimit.RECRUITMENT_POSITION)
-    private List<AddRecruitmentPositionRequest> addRecruitmentPositionRequestList;
+    private List<CreateRecruitmentPositionRequest> createRecruitmentPositionRequestList;
 }

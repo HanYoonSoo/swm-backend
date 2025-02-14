@@ -4,7 +4,7 @@ import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.domain.study.core.entity.StudyBookmark;
 import com.jj.swm.domain.study.core.entity.StudyCategory;
 import com.jj.swm.domain.study.core.entity.StudyStatus;
-import com.jj.swm.domain.study.recruitmentposition.dto.response.FindRecruitmentPositionResponse;
+import com.jj.swm.domain.study.recruitmentposition.dto.response.GetRecruitmentPositionResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class FindStudyResponse {
+public class GetStudyResponse {
 
     private Long studyId;
 
@@ -32,12 +32,12 @@ public class FindStudyResponse {
 
     private Long studyBookmarkId;
 
-    private List<FindStudyTagResponse> findTagResponseList;
+    private List<GetStudyTagResponse> getTagResponseList;
 
-    private List<FindRecruitmentPositionResponse> findRecruitmentPositionResponseList;
+    private List<GetRecruitmentPositionResponse> getRecruitmentPositionResponseList;
 
-    public static FindStudyResponse of(Study study, Long studyBookmarkId) {
-        return FindStudyResponse.builder()
+    public static GetStudyResponse of(Study study, Long studyBookmarkId) {
+        return GetStudyResponse.builder()
                 .studyId(study.getId())
                 .title(study.getTitle())
                 .content(study.getContent())
@@ -47,17 +47,17 @@ public class FindStudyResponse {
                 .status(study.getStatus())
                 .viewCount(study.getViewCount())
                 .studyBookmarkId(studyBookmarkId)
-                .findTagResponseList(study.getStudyTagList().stream()
-                        .map(FindStudyTagResponse::from)
+                .getTagResponseList(study.getStudyTagList().stream()
+                        .map(GetStudyTagResponse::from)
                         .toList())
-                .findRecruitmentPositionResponseList(study.getStudyRecruitmentPositionList().stream()
-                        .map(FindRecruitmentPositionResponse::from)
+                .getRecruitmentPositionResponseList(study.getStudyRecruitmentPositionList().stream()
+                        .map(GetRecruitmentPositionResponse::from)
                         .toList())
                 .build();
     }
 
-    public static FindStudyResponse of(StudyBookmark studyBookmark) {
-        return FindStudyResponse.builder()
+    public static GetStudyResponse of(StudyBookmark studyBookmark) {
+        return GetStudyResponse.builder()
                 .studyId(studyBookmark.getStudy().getId())
                 .title(studyBookmark.getStudy().getTitle())
                 .content(studyBookmark.getStudy().getContent())
@@ -67,11 +67,11 @@ public class FindStudyResponse {
                 .status(studyBookmark.getStudy().getStatus())
                 .viewCount(studyBookmark.getStudy().getViewCount())
                 .studyBookmarkId(studyBookmark.getId())
-                .findTagResponseList(studyBookmark.getStudy().getStudyTagList().stream()
-                        .map(FindStudyTagResponse::from)
+                .getTagResponseList(studyBookmark.getStudy().getStudyTagList().stream()
+                        .map(GetStudyTagResponse::from)
                         .toList())
-                .findRecruitmentPositionResponseList(studyBookmark.getStudy().getStudyRecruitmentPositionList().stream()
-                        .map(FindRecruitmentPositionResponse::from)
+                .getRecruitmentPositionResponseList(studyBookmark.getStudy().getStudyRecruitmentPositionList().stream()
+                        .map(GetRecruitmentPositionResponse::from)
                         .toList())
                 .build();
     }

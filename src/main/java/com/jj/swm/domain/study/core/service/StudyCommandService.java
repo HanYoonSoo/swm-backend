@@ -3,7 +3,7 @@ package com.jj.swm.domain.study.core.service;
 import com.jj.swm.domain.study.comment.repository.CommentRepository;
 import com.jj.swm.domain.study.constants.StudyElementLimit;
 import com.jj.swm.domain.study.core.dto.request.*;
-import com.jj.swm.domain.study.core.dto.response.AddStudyBookmarkResponse;
+import com.jj.swm.domain.study.core.dto.response.CreateStudyBookmarkResponse;
 import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.domain.study.core.entity.StudyBookmark;
 import com.jj.swm.domain.study.core.entity.StudyLike;
@@ -35,7 +35,7 @@ public class StudyCommandService {
     private final RecruitmentPositionRepository recruitmentPositionRepository;
 
     @Transactional
-    public void addStudy(UUID userId, AddStudyRequest request) {
+    public void addStudy(UUID userId, CreateStudyRequest request) {
         User user = userRepository.getReferenceById(userId);
 
         Study study = Study.of(user, request);
@@ -45,14 +45,14 @@ public class StudyCommandService {
 
         storeImageListIfPresent(study, request.getImageUrlList());
 
-        recruitmentPositionRepository.batchInsert(study, request.getAddRecruitmentPositionRequestList());
+        recruitmentPositionRepository.batchInsert(study, request.getCreateRecruitmentPositionRequestList());
     }
 
     @Transactional
     public void modifyStudy(
             UUID userId,
             Long studyId,
-            ModifyStudyRequest request
+            UpdateStudyRequest request
     ) {
         Study study = loadStudyOrException(userId, studyId);
 
@@ -107,7 +107,7 @@ public class StudyCommandService {
     public void modifyStudyStatus(
             UUID userId,
             Long studyId,
-            ModifyStudyStatusRequest request
+            UpdateStudyStatusRequest request
     ) {
         Study study = loadStudyOrException(userId, studyId);
         study.modifyStatus(request);
@@ -131,10 +131,10 @@ public class StudyCommandService {
     }
 
     @Transactional
-    public AddStudyBookmarkResponse addStudyBookmark(UUID userId, Long studyId) {
+    public CreateStudyBookmarkResponse addStudyBookmark(UUID userId, Long studyId) {
         Optional<StudyBookmark> optionalStudyBookmark = studyBookmarkRepository.findByUserIdAndStudyId(userId, studyId);
         if (optionalStudyBookmark.isPresent()) {
-            return AddStudyBookmarkResponse.from(optionalStudyBookmark.get());
+            return CreateStudyBookmarkResponse.from(optionalStudyBookmark.get());
         }
 
         User user = userRepository.getReferenceById(userId);
@@ -145,7 +145,7 @@ public class StudyCommandService {
         StudyBookmark studyBookmark = StudyBookmark.of(study, user);
         studyBookmarkRepository.save(studyBookmark);
 
-        return AddStudyBookmarkResponse.from(studyBookmark);
+        return CreateStudyBookmarkResponse.from(studyBookmark);
     }
 
     @Transactional

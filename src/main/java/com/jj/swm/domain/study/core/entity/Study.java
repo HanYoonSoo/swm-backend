@@ -1,8 +1,8 @@
 package com.jj.swm.domain.study.core.entity;
 
-import com.jj.swm.domain.study.core.dto.request.AddStudyRequest;
-import com.jj.swm.domain.study.core.dto.request.ModifyStudyRequest;
-import com.jj.swm.domain.study.core.dto.request.ModifyStudyStatusRequest;
+import com.jj.swm.domain.study.core.dto.request.CreateStudyRequest;
+import com.jj.swm.domain.study.core.dto.request.UpdateStudyRequest;
+import com.jj.swm.domain.study.core.dto.request.UpdateStudyStatusRequest;
 import com.jj.swm.domain.study.recruitmentposition.entity.StudyRecruitmentPosition;
 import com.jj.swm.domain.user.core.entity.User;
 import com.jj.swm.global.common.entity.BaseTimeEntity;
@@ -72,7 +72,7 @@ public class Study extends BaseTimeEntity {
     @OneToMany(mappedBy = "study")
     private List<StudyRecruitmentPosition> studyRecruitmentPositionList = new ArrayList<>();
 
-    public static Study of(User user, AddStudyRequest request) {
+    public static Study of(User user, CreateStudyRequest request) {
         return Study.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
@@ -86,14 +86,14 @@ public class Study extends BaseTimeEntity {
                 .build();
     }
 
-    public void modify(ModifyStudyRequest request) {
+    public void modify(UpdateStudyRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
         this.category = request.getCategory();
         this.openChatUrl = request.getOpenChatUrl();
     }
 
-    public void modifyStatus(ModifyStudyStatusRequest request) {
+    public void modifyStatus(UpdateStudyStatusRequest request) {
         this.status = request.getStatus();
     }
 

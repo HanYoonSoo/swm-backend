@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ModifyStudyRequest {
+public class UpdateStudyRequest {
 
     @NotBlank
     private String title;

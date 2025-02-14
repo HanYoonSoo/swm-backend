@@ -1,8 +1,8 @@
 package com.jj.swm.domain.study.recruitmentposition.controller;
 
-import com.jj.swm.domain.study.recruitmentposition.dto.request.AddRecruitmentPositionRequest;
-import com.jj.swm.domain.study.recruitmentposition.dto.request.ModifyRecruitmentPositionRequest;
-import com.jj.swm.domain.study.recruitmentposition.dto.response.AddRecruitmentPositionResponse;
+import com.jj.swm.domain.study.recruitmentposition.dto.request.CreateRecruitmentPositionRequest;
+import com.jj.swm.domain.study.recruitmentposition.dto.request.UpdateRecruitmentPositionRequest;
+import com.jj.swm.domain.study.recruitmentposition.dto.response.CreateRecruitmentPositionResponse;
 import com.jj.swm.domain.study.recruitmentposition.service.RecruitmentPositionCommandService;
 import com.jj.swm.global.common.dto.ApiResponse;
 import jakarta.validation.Valid;
@@ -20,12 +20,12 @@ public class RecruitmentPositionCommandController {
     private final RecruitmentPositionCommandService recruitmentPositionCommandService;
 
     @PostMapping("/v1/study/{studyId}/recruitment-position")
-    public ApiResponse<AddRecruitmentPositionResponse> recruitmentPositionAdd(
+    public ApiResponse<CreateRecruitmentPositionResponse> recruitmentPositionAdd(
             Principal principal,
             @PathVariable("studyId") Long studyId,
-            @Valid @RequestBody AddRecruitmentPositionRequest request
+            @Valid @RequestBody CreateRecruitmentPositionRequest request
     ) {
-        AddRecruitmentPositionResponse response = recruitmentPositionCommandService.addRecruitmentPosition(
+        CreateRecruitmentPositionResponse response = recruitmentPositionCommandService.addRecruitmentPosition(
                 UUID.fromString(principal.getName()),
                 studyId,
                 request
@@ -38,7 +38,7 @@ public class RecruitmentPositionCommandController {
     public ApiResponse<Void> recruitmentPositionModify(
             Principal principal,
             @PathVariable("recruitmentPositionId") Long recruitmentPositionId,
-            @Valid @RequestBody ModifyRecruitmentPositionRequest request
+            @Valid @RequestBody UpdateRecruitmentPositionRequest request
     ) {
         recruitmentPositionCommandService.modifyRecruitmentPosition(
                 UUID.fromString(principal.getName()),

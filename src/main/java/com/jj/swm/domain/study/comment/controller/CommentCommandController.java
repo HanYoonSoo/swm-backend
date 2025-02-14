@@ -1,8 +1,8 @@
 package com.jj.swm.domain.study.comment.controller;
 
 import com.jj.swm.domain.study.comment.dto.request.UpsertCommentRequest;
-import com.jj.swm.domain.study.comment.dto.response.AddCommentResponse;
-import com.jj.swm.domain.study.comment.dto.response.ModifyCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.CreateCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.UpdateCommentResponse;
 import com.jj.swm.domain.study.comment.service.CommentCommandService;
 import com.jj.swm.global.common.dto.ApiResponse;
 import jakarta.validation.Valid;
@@ -20,13 +20,13 @@ public class CommentCommandController {
     private final CommentCommandService commentCommandService;
 
     @PostMapping({"/v1/study/{studyId}/comment", "/v1/study/{studyId}/comment/{parentId}"})
-    public ApiResponse<AddCommentResponse> commentAdd(
+    public ApiResponse<CreateCommentResponse> commentAdd(
             Principal principal,
             @PathVariable("studyId") Long studyId,
             @PathVariable(value = "parentId", required = false) Long parentId,
             @Valid @RequestBody UpsertCommentRequest createRequest
     ) {
-        AddCommentResponse response = commentCommandService.addComment(
+        CreateCommentResponse response = commentCommandService.addComment(
                 UUID.fromString(principal.getName()),
                 studyId,
                 parentId,
@@ -37,12 +37,12 @@ public class CommentCommandController {
     }
 
     @PatchMapping("/v1/study/comment/{commentId}")
-    public ApiResponse<ModifyCommentResponse> commentModify(
+    public ApiResponse<UpdateCommentResponse> commentModify(
             Principal principal,
             @PathVariable("commentId") Long commentId,
             @Valid @RequestBody UpsertCommentRequest modifyRequest
     ) {
-        ModifyCommentResponse response = commentCommandService.modifyComment(
+        UpdateCommentResponse response = commentCommandService.modifyComment(
                 UUID.fromString(principal.getName()),
                 commentId,
                 modifyRequest

@@ -1,8 +1,8 @@
 package com.jj.swm.domain.study.comment.service;
 
 import com.jj.swm.domain.study.comment.dto.request.UpsertCommentRequest;
-import com.jj.swm.domain.study.comment.dto.response.AddCommentResponse;
-import com.jj.swm.domain.study.comment.dto.response.ModifyCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.CreateCommentResponse;
+import com.jj.swm.domain.study.comment.dto.response.UpdateCommentResponse;
 import com.jj.swm.domain.study.comment.entity.StudyComment;
 import com.jj.swm.domain.study.comment.repository.CommentRepository;
 import com.jj.swm.domain.study.core.entity.Study;
@@ -26,7 +26,7 @@ public class CommentCommandService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public AddCommentResponse addComment(
+    public CreateCommentResponse addComment(
             UUID userId,
             Long studyId,
             Long parentId,
@@ -47,7 +47,7 @@ public class CommentCommandService {
 
         commentRepository.save(comment);
 
-        return AddCommentResponse.from(comment);
+        return CreateCommentResponse.from(comment);
     }
 
     private StudyAndParentComment loadStudyAndParentComment(
@@ -92,7 +92,7 @@ public class CommentCommandService {
     }
 
     @Transactional
-    public ModifyCommentResponse modifyComment(
+    public UpdateCommentResponse modifyComment(
             UUID userId,
             Long commentId,
             UpsertCommentRequest modifyRequest
@@ -101,7 +101,7 @@ public class CommentCommandService {
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND, "comment not found"));
         comment.modify(modifyRequest);
 
-        return ModifyCommentResponse.from(comment);
+        return UpdateCommentResponse.from(comment);
     }
 
     @Transactional

@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class FindRecruitmentPositionResponse {
+public class GetRecruitmentPositionResponse {
 
     private Long recruitmentPositionId;
 
@@ -17,8 +17,8 @@ public class FindRecruitmentPositionResponse {
 
     private Integer acceptedCount;
 
-    public static FindRecruitmentPositionResponse from(StudyRecruitmentPosition recruitmentPosition) {
-        return FindRecruitmentPositionResponse.builder()
+    public static GetRecruitmentPositionResponse from(StudyRecruitmentPosition recruitmentPosition) {
+        return GetRecruitmentPositionResponse.builder()
                 .recruitmentPositionId(recruitmentPosition.getId())
                 .title(recruitmentPosition.getTitle())
                 .headcount(recruitmentPosition.getHeadcount())

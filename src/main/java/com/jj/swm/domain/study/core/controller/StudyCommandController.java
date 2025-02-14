@@ -1,9 +1,9 @@
 package com.jj.swm.domain.study.core.controller;
 
-import com.jj.swm.domain.study.core.dto.request.AddStudyRequest;
-import com.jj.swm.domain.study.core.dto.request.ModifyStudyStatusRequest;
-import com.jj.swm.domain.study.core.dto.request.ModifyStudyRequest;
-import com.jj.swm.domain.study.core.dto.response.AddStudyBookmarkResponse;
+import com.jj.swm.domain.study.core.dto.request.CreateStudyRequest;
+import com.jj.swm.domain.study.core.dto.request.UpdateStudyStatusRequest;
+import com.jj.swm.domain.study.core.dto.request.UpdateStudyRequest;
+import com.jj.swm.domain.study.core.dto.response.CreateStudyBookmarkResponse;
 import com.jj.swm.domain.study.core.service.StudyCommandService;
 import com.jj.swm.global.common.dto.ApiResponse;
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ public class StudyCommandController {
     private final StudyCommandService studyCommandService;
 
     @PostMapping("/v1/study")
-    public ApiResponse<Void> studyAdd(Principal principal, @Valid @RequestBody AddStudyRequest request) {
+    public ApiResponse<Void> studyAdd(Principal principal, @Valid @RequestBody CreateStudyRequest request) {
         studyCommandService.addStudy(UUID.fromString(principal.getName()), request);
 
         return ApiResponse.created(null);
@@ -31,7 +31,7 @@ public class StudyCommandController {
     public ApiResponse<Void> studyModify(
             Principal principal,
             @PathVariable("studyId") Long studyId,
-            @Valid @RequestBody ModifyStudyRequest request
+            @Valid @RequestBody UpdateStudyRequest request
     ) {
         studyCommandService.modifyStudy(
                 UUID.fromString(principal.getName()),
@@ -46,7 +46,7 @@ public class StudyCommandController {
     public ApiResponse<Void> studyStatusModify(
             Principal principal,
             @PathVariable("studyId") Long studyId,
-            @Valid @RequestBody ModifyStudyStatusRequest request
+            @Valid @RequestBody UpdateStudyStatusRequest request
     ) {
         studyCommandService.modifyStudyStatus(
                 UUID.fromString(principal.getName()),
@@ -65,10 +65,10 @@ public class StudyCommandController {
     }
 
     @PostMapping("/v1/study/{studyId}/bookmark")
-    public ApiResponse<AddStudyBookmarkResponse> StudyBookmarkAdd(
+    public ApiResponse<CreateStudyBookmarkResponse> StudyBookmarkAdd(
             Principal principal, @PathVariable("studyId") Long studyId
     ) {
-        AddStudyBookmarkResponse response = studyCommandService.addStudyBookmark(
+        CreateStudyBookmarkResponse response = studyCommandService.addStudyBookmark(
                 UUID.fromString(principal.getName()), studyId
         );
 
