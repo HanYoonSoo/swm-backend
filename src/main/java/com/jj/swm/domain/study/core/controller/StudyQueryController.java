@@ -7,10 +7,7 @@ import com.jj.swm.domain.study.core.service.StudyQueryService;
 import com.jj.swm.global.common.dto.ApiResponse;
 import com.jj.swm.global.common.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -40,5 +37,27 @@ public class StudyQueryController {
         );
 
         return ApiResponse.ok(response);
+    }
+
+    @GetMapping("/v1/study/user/liked-studies")
+    public ApiResponse<PageResponse<FindStudyResponse>> userLikedStudyList(
+            Principal principal, @RequestParam(value = "pageNo") int pageNo
+    ) {
+        PageResponse<FindStudyResponse> pageResponse = studyQueryService.findUserLikedStudyList(
+                UUID.fromString(principal.getName()), pageNo
+        );
+
+        return ApiResponse.ok(pageResponse);
+    }
+
+    @GetMapping("/v1/study/user/bookmarked-studies")
+    public ApiResponse<PageResponse<FindStudyResponse>> userBookmarkedStudyList(
+            Principal principal, @RequestParam(value = "pageNo") int pageNo
+    ) {
+        PageResponse<FindStudyResponse> pageResponse = studyQueryService.findUserBookmarkedStudyList(
+                UUID.fromString(principal.getName()), pageNo
+        );
+
+        return ApiResponse.ok(pageResponse);
     }
 }

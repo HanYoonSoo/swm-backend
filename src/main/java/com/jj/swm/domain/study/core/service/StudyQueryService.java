@@ -8,6 +8,7 @@ import com.jj.swm.domain.study.core.dto.response.FindStudyDetailsResponse;
 import com.jj.swm.domain.study.core.dto.response.FindStudyImageResponse;
 import com.jj.swm.domain.study.core.dto.response.FindStudyResponse;
 import com.jj.swm.domain.study.core.entity.Study;
+import com.jj.swm.domain.study.core.entity.StudyBookmark;
 import com.jj.swm.domain.study.core.entity.StudyImage;
 import com.jj.swm.domain.study.core.repository.StudyBookmarkRepository;
 import com.jj.swm.domain.study.core.repository.StudyImageRepository;
@@ -18,16 +19,14 @@ import com.jj.swm.global.common.dto.PageResponse;
 import com.jj.swm.global.common.enums.ErrorCode;
 import com.jj.swm.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +56,14 @@ public class StudyQueryService {
         List<FindStudyResponse> responseList = loadFindStudyResponse(pagedStudyList, bookmarkIdByStudyId);
 
         return PageResponse.of(responseList, hasNext);
+    }
+
+    private Map<Long, Long> loadBookmarkInfoMapIfLogin(UUID userId, List<Study> studyList) {
+        if (userId == null) {
+            return Collections.emptyMap();
+        }
+
+        return loadBookmarkInfoMap(userId, studyList);
     }
 
     private List<FindStudyResponse> loadFindStudyResponse(
@@ -113,16 +120,46 @@ public class StudyQueryService {
         return new LikeStatusAndBookmarkId(likeStatus, bookmarkId);
     }
 
-    public Map<Long, Long> loadBookmarkInfoMapIfLogin(UUID userId, List<Study> studyList) {
-        List<Long> studyIdList = studyList.stream()
+    @Transactional(readOnly = true)
+    public PageResponse<FindStudyResponse> findUserLikedStudyList(UUID userId, int pageNo) {
+        Pageable pageable = PageRequest.of(
+                pageNo,
+                PageSize.Study,
+                Sort.by("id").descending()
+        );
+
+        Page<Study> pagedStudy = studyLikeRepository.findPagedStudyByUserId(userId, pageable);
+
+        Map<Long, Long> bookmarkIdByStudyId = loadBookmarkInfoMap(userId, pagedStudy.getContent());
+
+        return PageResponse.of(
+                pagedStudy,
+                (study) -> FindStudyResponse.of(study, bookmarkIdByStudyId.getOrDefault(study.getId(), null))
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public PageResponse<FindStudyResponse> findUserBookmarkedStudyList(UUID userId, int pageNo) {
+        Pageable pageable = PageRequest.of(
+                pageNo,
+                PageSize.Study,
+                Sort.by("id").descending()
+        );
+
+        Page<StudyBookmark> pagedStudyBookmark = studyBookmarkRepository.findPagedBookmarkByUserIdWithStudy(
+                userId, pageable
+        );
+
+        return PageResponse.of(pagedStudyBookmark, FindStudyResponse::of);
+    }
+
+    private Map<Long, Long> loadBookmarkInfoMap(UUID userId, Collection<Study> pagedStudy) {
+        List<Long> studyIdList = pagedStudy.stream()
                 .map(Study::getId)
                 .toList();
 
-        return userId != null
-                ? studyBookmarkRepository.findAllByUserIdAndStudyIdList(userId, studyIdList)
-                .stream()
-                .collect(Collectors.toMap(StudyBookmarkInfo::studyId, StudyBookmarkInfo::id))
-                : Collections.emptyMap();
+        return studyBookmarkRepository.findAllByUserIdAndStudyIdList(userId, studyIdList).stream()
+                .collect(Collectors.toMap(StudyBookmarkInfo::studyId, StudyBookmarkInfo::id));
     }
 
     private record LikeStatusAndBookmarkId(boolean likeStatus, Long bookmarkId) {

@@ -1,6 +1,5 @@
 package com.jj.swm.domain.user.core.controller;
 
-import com.jj.swm.domain.study.core.dto.response.FindStudyResponse;
 import com.jj.swm.domain.user.core.dto.response.GetBusinessVerificationRequestResponse;
 import com.jj.swm.domain.user.core.dto.response.GetUserInfoResponse;
 import com.jj.swm.domain.user.core.entity.InspectionStatus;
@@ -100,28 +99,6 @@ public class UserQueryController {
                 = userQueryService.getBusinessVerificationRequests(status, pageNo);
 
         return ApiResponse.ok(response);
-    }
-
-    @GetMapping("/v1/user/liked-studies")
-    public ApiResponse<PageResponse<FindStudyResponse>> userLikedStudyList(
-            Principal principal, @RequestParam(value = "pageNo") int pageNo
-    ) {
-        PageResponse<FindStudyResponse> pageResponse = userQueryService.findLikedStudyList(
-                UUID.fromString(principal.getName()), pageNo
-        );
-
-        return ApiResponse.ok(pageResponse);
-    }
-
-    @GetMapping("/v1/user/bookmarked-studies")
-    public ApiResponse<PageResponse<FindStudyResponse>> userBookmarkedStudyList(
-            Principal principal, @RequestParam(value = "pageNo") int pageNo
-    ) {
-        PageResponse<FindStudyResponse> pageResponse = userQueryService.findBookmarkedStudyList(
-                UUID.fromString(principal.getName()), pageNo
-        );
-
-        return ApiResponse.ok(pageResponse);
     }
 
     @Operation(
