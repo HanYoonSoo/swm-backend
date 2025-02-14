@@ -14,7 +14,8 @@ import java.util.List;
 public class GetStudyRoomDetailResponse {
 
     private Long studyRoomId;
-    private boolean likeStatus;
+    private Long likeId;
+    private Long bookmarkId;
     private String title;
     private String subtitle;
     private String introduce;
@@ -42,7 +43,8 @@ public class GetStudyRoomDetailResponse {
 
     public static GetStudyRoomDetailResponse of(
             StudyRoom studyRoom,
-            boolean likeStatus,
+            Long likeId,
+            Long bookmarkId,
             List<GetStudyRoomImageResponse> imageResponses,
             List<GetStudyRoomDayOffResponse> dayOffResponses,
             List<GetStudyRoomReserveTypeResponse> reserveTypeResponses,
@@ -51,7 +53,8 @@ public class GetStudyRoomDetailResponse {
     ) {
         return GetStudyRoomDetailResponse.builder()
                 .studyRoomId(studyRoom.getId())
-                .likeStatus(likeStatus)
+                .likeId(likeId)
+                .bookmarkId(bookmarkId)
                 .title(studyRoom.getTitle())
                 .subtitle(studyRoom.getSubtitle())
                 .introduce(studyRoom.getIntroduce())
