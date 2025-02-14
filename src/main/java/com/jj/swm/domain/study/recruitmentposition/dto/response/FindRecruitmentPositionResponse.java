@@ -1,5 +1,6 @@
 package com.jj.swm.domain.study.recruitmentposition.dto.response;
 
+import com.jj.swm.domain.study.recruitmentposition.entity.RecruitmentPositionTitle;
 import com.jj.swm.domain.study.recruitmentposition.entity.StudyRecruitmentPosition;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ public class FindRecruitmentPositionResponse {
 
     private Long recruitmentPositionId;
 
-    private String title;
+    private RecruitmentPositionTitle title;
 
     private Integer headcount;
 

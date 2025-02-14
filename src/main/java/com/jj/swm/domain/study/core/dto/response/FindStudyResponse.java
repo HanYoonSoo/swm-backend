@@ -4,6 +4,7 @@ import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.domain.study.core.entity.StudyBookmark;
 import com.jj.swm.domain.study.core.entity.StudyCategory;
 import com.jj.swm.domain.study.core.entity.StudyStatus;
+import com.jj.swm.domain.study.recruitmentposition.dto.response.FindRecruitmentPositionResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -33,6 +34,8 @@ public class FindStudyResponse {
 
     private List<FindStudyTagResponse> findTagResponseList;
 
+    private List<FindRecruitmentPositionResponse> findRecruitmentPositionResponseList;
+
     public static FindStudyResponse of(Study study, Long studyBookmarkId) {
         return FindStudyResponse.builder()
                 .studyId(study.getId())
@@ -46,6 +49,9 @@ public class FindStudyResponse {
                 .studyBookmarkId(studyBookmarkId)
                 .findTagResponseList(study.getStudyTagList().stream()
                         .map(FindStudyTagResponse::from)
+                        .toList())
+                .findRecruitmentPositionResponseList(study.getStudyRecruitmentPositionList().stream()
+                        .map(FindRecruitmentPositionResponse::from)
                         .toList())
                 .build();
     }
@@ -63,6 +69,9 @@ public class FindStudyResponse {
                 .studyBookmarkId(studyBookmark.getId())
                 .findTagResponseList(studyBookmark.getStudy().getStudyTagList().stream()
                         .map(FindStudyTagResponse::from)
+                        .toList())
+                .findRecruitmentPositionResponseList(studyBookmark.getStudy().getStudyRecruitmentPositionList().stream()
+                        .map(FindRecruitmentPositionResponse::from)
                         .toList())
                 .build();
     }

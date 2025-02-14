@@ -8,13 +8,13 @@ import lombok.Getter;
 @Builder
 public class FindStudyTagResponse {
 
-    private Long studyTagId;
+    private Long tagId;
 
     private String name;
 
     public static FindStudyTagResponse from(StudyTag studyTag) {
         return FindStudyTagResponse.builder()
-                .studyTagId(studyTag.getId())
+                .tagId(studyTag.getId())
                 .name(studyTag.getName())
                 .build();
     }

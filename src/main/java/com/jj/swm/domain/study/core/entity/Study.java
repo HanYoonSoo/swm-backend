@@ -3,6 +3,7 @@ package com.jj.swm.domain.study.core.entity;
 import com.jj.swm.domain.study.core.dto.request.AddStudyRequest;
 import com.jj.swm.domain.study.core.dto.request.ModifyStudyRequest;
 import com.jj.swm.domain.study.core.dto.request.ModifyStudyStatusRequest;
+import com.jj.swm.domain.study.recruitmentposition.entity.StudyRecruitmentPosition;
 import com.jj.swm.domain.user.core.entity.User;
 import com.jj.swm.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -67,6 +68,9 @@ public class Study extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "study")
     private List<StudyTag> studyTagList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "study")
+    private List<StudyRecruitmentPosition> studyRecruitmentPositionList = new ArrayList<>();
 
     public static Study of(User user, AddStudyRequest request) {
         return Study.builder()

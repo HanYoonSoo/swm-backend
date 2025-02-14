@@ -25,4 +25,7 @@ public interface StudyBookmarkRepository extends JpaRepository<StudyBookmark, Lo
 
     @Query("select b from StudyBookmark b join fetch b.study where b.user.id = ?1")
     Page<StudyBookmark> findPagedBookmarkByUserIdWithStudy(UUID userId, Pageable pageable);
+
+    @Query("select b.id from StudyBookmark b where b.user.id = ?1 and b.study.id = ?2")
+    Long findIdByUserIdAndStudyId(UUID userId, Long studyId);
 }

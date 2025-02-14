@@ -1,12 +1,14 @@
 package com.jj.swm.domain.study.recruitmentposition.entity;
 
+import com.jj.swm.domain.study.core.entity.Study;
 import com.jj.swm.domain.study.recruitmentposition.dto.request.AddRecruitmentPositionRequest;
 import com.jj.swm.domain.study.recruitmentposition.dto.request.ModifyRecruitmentPositionRequest;
-import com.jj.swm.domain.study.core.entity.Study;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.LocalDateTime;
 
@@ -24,8 +26,10 @@ public class StudyRecruitmentPosition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", length = 50, nullable = false)
-    private String title;
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(name = "title", nullable = false)
+    private RecruitmentPositionTitle title;
 
     @Column(name = "headcount", nullable = false)
     private Integer headcount;

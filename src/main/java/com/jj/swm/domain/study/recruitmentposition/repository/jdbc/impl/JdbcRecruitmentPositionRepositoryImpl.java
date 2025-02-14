@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 @Repository
@@ -29,7 +30,7 @@ public class JdbcRecruitmentPositionRepositoryImpl implements JdbcRecruitmentPos
                 AddRecruitmentPositionRequest request = requestList.get(i);
 
                 ps.setLong(1, study.getId());
-                ps.setString(2, request.getTitle());
+                ps.setObject(2, request.getTitle().name(), Types.OTHER);
                 ps.setInt(3, request.getHeadcount());
                 ps.setInt(4, 0);
             }
