@@ -69,9 +69,10 @@ public class StudyRoomQueryService {
         StudyRoom studyRoom = studyRoomRepository.findByIdWithTags(studyRoomId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND, "StudyRoom Not Found"));
 
-        boolean likeStatus = userId != null && likeRepository.existsByStudyRoomIdAndUserId(studyRoomId, userId);
+        Long likeId = userId != null ? likeRepository.findIdByStudyRoomIdAndUserId(studyRoomId, userId) : null;
+        Long bookmarkId = userId != null ? bookmarkRepository.findIdByStudyRoomIdAndUserId(studyRoomId, userId) : null;
 
-        return createAllOfStudyRoomRelatedResponse(studyRoomId, likeStatus, studyRoom);
+        return createAllOfStudyRoomRelatedResponse(likeId, bookmarkId, studyRoom);
     }
 
     @Transactional(readOnly = true)
@@ -111,36 +112,37 @@ public class StudyRoomQueryService {
     }
 
     private GetStudyRoomDetailResponse createAllOfStudyRoomRelatedResponse(
-            Long studyRoomId,
-            boolean likeStatus,
+            Long likeId,
+            Long bookmarkId,
             StudyRoom studyRoom
     ) {
-        List<GetStudyRoomImageResponse> imageResponses = imageRepository.findAllByStudyRoomId(studyRoomId).stream()
+        List<GetStudyRoomImageResponse> imageResponses = imageRepository.findAllByStudyRoomId(studyRoom.getId()).stream()
                 .map(GetStudyRoomImageResponse::from)
                 .toList();;
 
-        List<GetStudyRoomDayOffResponse> dayOffResponses = dayOffRepository.findAllByStudyRoomId(studyRoomId).stream()
+        List<GetStudyRoomDayOffResponse> dayOffResponses = dayOffRepository.findAllByStudyRoomId(studyRoom.getId()).stream()
                 .map(GetStudyRoomDayOffResponse::from)
                 .toList();;
 
         List<GetStudyRoomReserveTypeResponse> reserveTypeResponses =
-                reserveTypeRepository.findAllByStudyRoomId(studyRoomId).stream()
+                reserveTypeRepository.findAllByStudyRoomId(studyRoom.getId()).stream()
                         .map(GetStudyRoomReserveTypeResponse::from)
                         .toList();;
 
-        List<GetStudyRoomOptionInfoResponse> optionInfoResponses = optionInfoRepository.findAllByStudyRoomId(studyRoomId)
+        List<GetStudyRoomOptionInfoResponse> optionInfoResponses = optionInfoRepository.findAllByStudyRoomId(studyRoom.getId())
                 .stream()
                 .map(GetStudyRoomOptionInfoResponse::from)
                 .toList();
 
-        List<GetStudyRoomTypeInfoResponse> typeInfoResponses = typeReInfoRepository.findAllByStudyRoomId(studyRoomId)
+        List<GetStudyRoomTypeInfoResponse> typeInfoResponses = typeReInfoRepository.findAllByStudyRoomId(studyRoom.getId())
                 .stream()
                 .map(GetStudyRoomTypeInfoResponse::from)
                 .toList();
 
         return GetStudyRoomDetailResponse.of(
                 studyRoom,
-                likeStatus,
+                likeId,
+                bookmarkId,
                 imageResponses,
                 dayOffResponses,
                 reserveTypeResponses,

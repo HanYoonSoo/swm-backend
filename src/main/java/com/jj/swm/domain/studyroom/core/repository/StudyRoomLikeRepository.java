@@ -19,6 +19,9 @@ public interface StudyRoomLikeRepository extends JpaRepository<StudyRoomLike, Lo
 
     Optional<StudyRoomLike> findByStudyRoomIdAndUserId(Long studyRoomId, UUID userId);
 
+    @Query("select s.id from StudyRoomLike s where s.studyRoom.id = ?1 and s.user.id = ?2")
+    Long findIdByStudyRoomIdAndUserId(Long studyRoomId, UUID userId);
+
     int countStudyRoomLikeByStudyRoom(StudyRoom studyRoom);
 
     @Modifying
