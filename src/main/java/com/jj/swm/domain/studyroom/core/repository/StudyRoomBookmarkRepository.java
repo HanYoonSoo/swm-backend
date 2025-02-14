@@ -25,4 +25,7 @@ public interface StudyRoomBookmarkRepository extends JpaRepository<StudyRoomBook
     @Modifying
     @Query("delete from StudyRoomBookmark s where s.studyRoom.id = ?1")
     void deleteAllByStudyRoomId(Long studyRoomId);
+
+    @Query("select s.id from StudyRoomBookmark s where s.studyRoom.id = ?1 and s.user.id = ?2")
+    Long findIdByStudyRoomIdAndUserId(Long studyRoomId, UUID userId);
 }
