@@ -299,7 +299,7 @@ public class StudyRoomQueryServiceIntegrationTest extends IntegrationContainerSu
     @Test
     @DisplayName("유저 ID와 함께 조회 요청 시 좋아요 정보도 반환한다.")
     @Transactional
-    void studyRoom_getStudyRoomsWithUserId_thenReturnLikeInfo_Success() {
+    void studyRoom_getStudyRoomDetailWithUserId_thenReturnLikeId_Success() {
         //given
         User user = users.getFirst();
 
@@ -308,7 +308,23 @@ public class StudyRoomQueryServiceIntegrationTest extends IntegrationContainerSu
                 = queryService.getStudyRoomDetail(studyRooms.getFirst().getId(), user.getId());
 
         //then
-        assertThat(response.isLikeStatus()).isTrue();
+        assertThat(response.getLikeId()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("유저 ID와 함께 조회 요청 시 북마크 정보도 반환한다.")
+    @Transactional
+    void studyRoom_getStudyRoomDetailWithUserId_thenReturnBookmarkId_Success() {
+        //given
+        User user = users.getFirst();
+        bookmarkRepository.save(StudyRoomBookmark.of(studyRooms.getFirst(), user));
+
+        //when
+        GetStudyRoomDetailResponse response
+                = queryService.getStudyRoomDetail(studyRooms.getFirst().getId(), user.getId());
+
+        //then
+        assertThat(response.getBookmarkId()).isNotNull();
     }
 
     @Test
