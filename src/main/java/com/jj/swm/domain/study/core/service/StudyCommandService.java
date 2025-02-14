@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.jj.swm.global.common.util.ListCheckUtils.isListPresent;
+
 @Service
 @RequiredArgsConstructor
 public class StudyCommandService {
@@ -77,7 +79,7 @@ public class StudyCommandService {
             storeTagListIfPresent(study, tagListToAdd);
 
             List<Long> tagIdListToRemove = request.getTagIdListToRemove();
-            if (tagIdListToRemove != null && !tagIdListToRemove.isEmpty()) {
+            if (isListPresent(tagIdListToRemove)) {
                 studyTagRepository.deleteAllByIdListAndStudyId(tagIdListToRemove, study.getId());
             }
         }
@@ -97,7 +99,7 @@ public class StudyCommandService {
             storeImageListIfPresent(study, imageUrlListToAdd);
 
             List<Long> imageIdListToRemove = request.getImageIdListToRemove();
-            if (imageIdListToRemove != null && !imageIdListToRemove.isEmpty()) {
+            if (isListPresent(imageIdListToRemove)) {
                 studyImageRepository.deleteAllByIdListAndStudyId(imageIdListToRemove, study.getId());
             }
         }
@@ -185,13 +187,13 @@ public class StudyCommandService {
     }
 
     private void storeTagListIfPresent(Study study, List<String> tagList) {
-        if (tagList != null && !tagList.isEmpty()) {
+        if (isListPresent(tagList)) {
             studyTagRepository.batchInsert(study, tagList);
         }
     }
 
     private void storeImageListIfPresent(Study study, List<String> imageUrlList) {
-        if (imageUrlList != null && !imageUrlList.isEmpty()) {
+        if (isListPresent(imageUrlList)) {
             studyImageRepository.batchInsert(study, imageUrlList);
         }
     }
