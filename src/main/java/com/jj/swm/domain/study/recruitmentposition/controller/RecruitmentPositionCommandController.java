@@ -5,6 +5,7 @@ import com.jj.swm.domain.study.recruitmentposition.dto.request.UpdateRecruitment
 import com.jj.swm.domain.study.recruitmentposition.dto.response.CreateRecruitmentPositionResponse;
 import com.jj.swm.domain.study.recruitmentposition.service.RecruitmentPositionCommandService;
 import com.jj.swm.global.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "StudyRecruitmentPosition", description = "<b>[스터디 모집 포지션]</b> API")
 public class RecruitmentPositionCommandController {
 
     private final RecruitmentPositionCommandService recruitmentPositionCommandService;

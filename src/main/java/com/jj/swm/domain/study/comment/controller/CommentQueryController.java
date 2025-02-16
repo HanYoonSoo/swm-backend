@@ -5,12 +5,14 @@ import com.jj.swm.domain.study.comment.dto.response.GetCommentResponse;
 import com.jj.swm.domain.study.comment.service.CommentQueryService;
 import com.jj.swm.global.common.dto.ApiResponse;
 import com.jj.swm.global.common.dto.PageResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "StudyComment", description = "<b>[스터디 댓글]</b> API")
 public class CommentQueryController {
 
     private final CommentQueryService commentQueryService;

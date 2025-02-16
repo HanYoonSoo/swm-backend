@@ -6,6 +6,7 @@ import com.jj.swm.domain.study.core.dto.response.GetStudyResponse;
 import com.jj.swm.domain.study.core.service.StudyQueryService;
 import com.jj.swm.global.common.dto.ApiResponse;
 import com.jj.swm.global.common.dto.PageResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "Study", description = "<b>[스터디]</b> API")
 public class StudyQueryController {
 
     private final StudyQueryService studyQueryService;

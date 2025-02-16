@@ -6,6 +6,7 @@ import com.jj.swm.domain.study.core.dto.request.UpdateStudyRequest;
 import com.jj.swm.domain.study.core.dto.response.CreateStudyBookmarkResponse;
 import com.jj.swm.domain.study.core.service.StudyCommandService;
 import com.jj.swm.global.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "Study", description = "<b>[스터디]</b> API")
 public class StudyCommandController {
 
     private final StudyCommandService studyCommandService;
