@@ -1,5 +1,6 @@
 package com.jj.swm.domain.studyroom.core.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jj.swm.domain.studyroom.core.entity.StudyRoom;
 import com.jj.swm.domain.studyroom.core.entity.embeddable.Address;
 import com.jj.swm.domain.studyroom.core.entity.embeddable.Coordinates;
@@ -21,8 +22,13 @@ public class GetStudyRoomDetailResponse {
     private String introduce;
     private String notice;
     private String guideline;
+
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime openingTime;
+
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime closingTime;
+
     private Address address;
     private Coordinates coordinates;
     private String referenceUrl;
