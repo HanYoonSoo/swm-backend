@@ -75,6 +75,10 @@ public class CustomStudyRepositoryImpl implements CustomStudyRepository {
             case SortCriteria.NEWEST -> new OrderSpecifier<?>[]{
                     new OrderSpecifier<>(Order.DESC, study.id)
             };
+            case SortCriteria.COMMENT -> new OrderSpecifier<?>[]{
+                    new OrderSpecifier<>(Order.DESC, study.commentCount),
+                    new OrderSpecifier<>(Order.DESC, study.id),
+            };
         };
     }
 
@@ -86,6 +90,8 @@ public class CustomStudyRepositoryImpl implements CustomStudyRepository {
         return switch (sortCriteria) {
             case LIKE -> this.nullSafeBuilder(() -> study.likeCount.lt(lastSortValue)
                     .or(study.likeCount.eq(lastSortValue).and(study.id.lt(lastStudyId))));
+            case COMMENT -> this.nullSafeBuilder(() -> study.commentCount.lt(lastSortValue)
+                    .or(study.commentCount.eq(lastSortValue).and(study.id.lt(lastStudyId))));
             default -> this.nullSafeBuilder(() -> study.id.lt(lastStudyId));
         };
     }
